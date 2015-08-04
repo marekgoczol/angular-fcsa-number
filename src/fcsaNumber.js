@@ -132,6 +132,7 @@
               return val;
             }
             ngModelCtrl.$setValidity('fcsaNumber', true);
+            val = parseFloat(val).toFixed(2);
             val = addCommasToInteger(val.toString());
             if (options.prepend != null) {
               val = "" + options.prepend + val;
@@ -157,14 +158,18 @@
           });
           elem.on('focus', function() {
             var val;
-            val = elem.val();
-            if (options.prepend != null) {
+            if (ngModelCtrl && ngModelCtrl.$modelValue) {
+                val = parseFloat(ngModelCtrl.$modelValue).toFixed(2);
+            }
+            if (val && options.prepend != null) {
               val = val.replace(options.prepend, '');
             }
-            if (options.append != null) {
+            if (val && options.append != null) {
               val = val.replace(options.append, '');
             }
-            elem.val(val.replace(/,/g, ''));
+            if (val) {
+                elem.val(val.replace(/,/g, ''));
+            }
             return elem[0].select();
           });
           if (options.preventInvalidInput === true) {
